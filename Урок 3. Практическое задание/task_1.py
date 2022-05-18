@@ -28,3 +28,139 @@ b) получение элемента списка, оцените сложно
 обязательно реализуйте ф-цию-декоратор и пусть она считает время
 И примените ее к своим функциям!
 """
+from time import time
+from random import random
+
+
+def benchmark(func):
+    def wrapper(*args, **kwargs):
+        start = time()
+        res = func(*args)
+        end = time()
+        if not kwargs.get('nobench'):
+            print(f'{end - start} сек')
+        return res
+    return wrapper
+
+
+@benchmark                       # 3.3 сек
+def list_filling(n):                # O(n)
+    ls = []                          # O(1)
+    for i in range(n):               # O(n)
+        a = random()                 # O(1)
+        ls.append((i, a))            # O(1)
+    return ls
+
+
+@benchmark                       # 0.5 сек
+def lst_idx(ls):                   # O(n)
+    n = len(ls)                      # O(1)
+    for i in range(n):               # O(n)
+        a = ls[i]                    # O(1)
+    return a                         # O(1)
+
+
+@benchmark                       # 1.4 сек
+def lst_pop(ls):                   # O(n**2)
+    n = len(ls)                      # O(1)
+    for i in range(n):               # O(n)
+        a = ls.pop()                 # O(n)
+    return a                         # O(1)
+
+
+@benchmark                       # 1.5 сек
+def lst_del(ls):                   # O(n**2)
+    n = len(ls)                      # O(1)
+    for i in range(n):               # O(n)
+        del ls[-1]                   # O(n)
+
+
+@benchmark                       # 2.2 сек
+def dict_filling(n):                # O(n)
+    dc = {}                          # O(1)
+    for i in range(n):               # O(n)
+        a = random()                 # O(1)
+        dc.setdefault(i, a)          # O(1)
+    return dc                        # O(1)
+
+
+@benchmark                       # 0.5 сек
+def dict_keys(dc, keys):           # O(n)
+    for key in keys:                 # O(n)
+        a = dc[key]                  # O(1)
+    return a                         # O(1)
+
+
+@benchmark                       # 1 сек
+def dict_pop(dc):                  # O(n)
+    n = len(dc)                      # O(1)
+    for i in range(n):               # O(n)
+        a = dc.popitem()             # O(1)
+    return a                         # O(1)
+
+
+@benchmark                       # 1.2 сек
+def dict_del(dc, keys):            # O(n)
+    keys = keys[::-1]                # O(n)
+    for key in keys:                 # O(n)
+        del dc[key]                  # O(1)
+
+
+if __name__ == "__main__":
+    n = 10000000
+
+    print(f"Заполнение {n} элементов в список: ", end="")
+    lst = list_filling(n)
+    print("Извлечение элементов из списка по индексам: ", end="")
+    lst_idx(lst)
+    print("Извлечение элементов из списка методом pop: ", end="")
+    lst_pop(lst)
+    lst = list_filling(n, nobench=True)
+    print("Удаление элементов из списка с помощью del: ", end="")
+    lst_del(lst)
+    print()
+
+    print(f"Заполнение {n} элементов в словарь: ", end="")
+    dct = dict_filling(n)
+    print("Извлечение элементов из словаря по ключам: ", end="")
+    keys = list(dct.keys())
+    dict_keys(dct, keys)
+    print("Извлечение элементов из словаря методом popintem: ", end="")
+    dict_pop(dct)
+    dct = dict_filling(n, nobench=True)
+    keys = list(dct.keys())
+    print("Удаление элементов из списка с помощью del: ", end="")
+    dict_del(dct, keys)
+
+
+"""
+Заполнение 10000000 элементов в список: 3.293032646179199 сек
+Извлечение элементов из списка по индексам: 0.5193212032318115 сек
+Извлечение элементов из списка методом pop: 1.4447057247161865 сек
+Удаление элементов из списка с помощью del: 1.5107791423797607 сек
+
+Заполнение 10000000 элементов в словарь: 2.202284336090088 сек
+Извлечение элементов из словаря по ключам: 0.4898872375488281 сек
+Извлечение элементов из словаря методом popintem: 1.0578172206878662 сек
+Удаление элементов из списка с помощью del: 1.1578619480133057 сек
+
+
+a) Заполнение словаря происходит быстрее
+b) Получение элементов из словаря чуть быстрее по индексам/ключам и значительно быстрее методом popitem.
+c) Удаление элементов из словаря быстрее
+   
+   Однако, если ключи у словаря будут не целыми от 1 до n, а вещественными от 0 до 1 (заполнение данных (a, a),
+   а не (i, a)), то операции со списком значительно быстрее, вероятно из-за сложности вычисления хэшей
+
+
+Заполнение 10000000 элементов в список: 2.77964448928833 сек
+Извлечение элементов из списка по индексам: 0.5365948677062988 сек
+Извлечение элементов из списка методом pop: 1.163081169128418 сек
+Удаление элементов из списка с помощью del: 1.3105332851409912 сек
+
+Заполнение 10000000 элементов в словарь: 5.768535137176514 сек
+Извлечение элементов из словаря по ключам: 3.232419729232788 сек
+Извлечение элементов из словаря методом popintem: 2.3785219192504883 сек
+Удаление элементов из списка с помощью del: 3.7996044158935547 сек
+
+"""
