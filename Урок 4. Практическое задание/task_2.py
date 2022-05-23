@@ -64,6 +64,12 @@ def recursive_reverse_mem(number):
     return f'{str(number % 10)}{recursive_reverse_mem(number // 10)}'
 
 
+recursive_reverse_mem(123)
+recursive_reverse_mem(1230)
+recursive_reverse_mem(12301)
+recursive_reverse_mem(123012)
+
+
 print('Оптимизированная функция recursive_reverse_mem')
 print(
     timeit(
@@ -80,3 +86,17 @@ print(
         'recursive_reverse_mem(num_10000)',
         setup='from __main__ import recursive_reverse_mem, num_10000',
         number=10000))
+
+"""
+123, 1230, 12301, 123012 -- в таких случаях меморизация помогает
+Замеры подтверждают эффективность меморизации
+
+Не оптимизированная функция recursive_reverse
+0.0433457
+0.052503999999999995
+0.08536380000000002
+Оптимизированная функция recursive_reverse_mem
+0.002611299999999983
+0.0028682999999999903
+0.0031007000000000118
+"""
