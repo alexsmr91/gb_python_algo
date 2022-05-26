@@ -11,7 +11,7 @@
 
 ОБЯЗАТЕЛЬНО! Добавьте аналитику: что вы сделали и какой это принесло эффект
 """
-from timeit import Timer
+from timeit import timeit
 
 
 def func_1(nums):
@@ -27,16 +27,15 @@ def func_2(nums):
 
 
 if __name__ == "__main__":
+    n_tests = 1000000
     a = [x for x in range(10000)]
-    t1 = Timer("func_1(a)", "from __main__ import func_1, a")
-    print(f'Append {t1.timeit(number=100000)} sec')
-    t2 = Timer("func_2(a)", "from __main__ import func_2, a")
-    print(f'LC {t1.timeit(number=100000)} sec')
+    print(f'Append {timeit("func_1(a)", globals=globals(), number=n_tests)} sec')
+    print(f'LC {timeit("func_2(a)", globals=globals(), number=n_tests)} sec')
 
 """
-Append 118.6185954 sec
-LC 117.7041988 sec
+Append 120.91151649999999 sec
+LC 95.49185170000001 sec
 
-Читаемость кода улучшилась, время почти не изменилось
+Читаемость кода улучшилась, LC быстрее на 15-20%
 
 """
