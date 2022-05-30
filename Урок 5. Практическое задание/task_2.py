@@ -24,3 +24,42 @@ reduce
 __mul__
 __add__
 """
+from collections import defaultdict
+
+
+class MyHexNum:
+
+    def __init__(self, value):
+        self.value = value
+
+    def __mul__(self, other):
+        return hex(int(self.value, 16) * int(other.value, 16))[2:]
+
+    def __add__(self, other):
+        return hex(int(self.value, 16) + int(other.value, 16))[2:]
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
+
+
+if __name__ == "__main__":
+    def_dict = defaultdict(list)
+    a = input('Введите первое 16-ричное число : 0x')
+    b = input('Введите второе 16-ричное число : 0x')
+    def_dict[a] = list(a)
+    def_dict[b] = list(b)
+    summ = hex(int(''.join(def_dict[a]), 16) + int(''.join(def_dict[b]), 16))[2:]
+    def_dict[summ] = list(summ)
+    mul = hex(int(''.join(def_dict[a]), 16) * int(''.join(def_dict[b]), 16))[2:]
+    def_dict[mul] = list(mul)
+    print('Сумма чисел :', def_dict[summ])
+    print('Произведение чисел :', def_dict[mul])
+
+    print('Через ООП:')
+    a = MyHexNum(input('Введите первое 16-ричное число : 0x'))
+    b = MyHexNum(input('Введите второе 16-ричное число : 0x'))
+    print('Сумма чисел :', a + b)
+    print('Произведение чисел :', a * b)
