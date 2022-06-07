@@ -29,4 +29,98 @@
 генераторы, numpy, использование слотов, применение del, сериализация и т.д.
 
 Это файл для третьего скрипта
+
+
+ДЗ 1 из курса основ, задача 2
+
+
+Создать список, состоящий из кубов нечётных чисел от 1 до 1000 (куб X - третья степень
+числа X):
+a. Вычислить сумму тех чисел из этого списка, сумма цифр которых делится нацело на 7.
+Например, число «19 ^ 3 = 6859» будем включать в сумму, так как 6 + 8 + 5 + 9 = 28 –
+делится нацело на 7. Внимание: использовать только арифметические операции!
+b. К каждому элементу списка добавить 17 и заново вычислить сумму тех чисел из этого
+списка, сумма цифр которых делится нацело на 7.
+c. * Решить задачу под пунктом b, не создавая новый список.
+
+"""
+from memory_profiler import profile
+
+
+def sum_list_1(dataset: list) -> int:
+    """Вычисляет сумму чисел списка dataset, сумма цифр которых делится нацело на 7"""
+    # место для написания кода
+    summ = 0
+    for numb in dataset:
+        sum_dig = sum_of_digits(numb)
+        if (sum_dig % 7) == 0:
+            summ += numb
+    return summ  # Верните значение полученной суммы
+
+
+# def sum_list_2(dataset: list) -> int:
+#     """К каждому элементу списка добавляет 17 и вычисляет сумму чисел списка,
+#         сумма цифр которых делится нацело на 7"""
+#     # место для написания кода
+#     summ = 0
+#     for numb in dataset:
+#         sum_dig = sum_of_digits(numb + 17)
+#         if (sum_dig % 7) == 0:
+#             summ += numb + 17
+#     return summ  # Верните значение полученной суммы
+
+
+def sum_of_digits(numb: int):
+    summ = 0
+    while numb > 0:
+        summ += numb % 10
+        numb = numb // 10
+    return summ
+
+
+@profile
+def fill_list_lc():
+    my_list = [i ** 3 for i in range(3, 100000, 2)]  # Соберите нужный список по заданию
+    print(sum_list_1(my_list))
+
+
+@profile
+def fill_list_gen():
+    my_list = (i ** 3 for i in range(3, 100000, 2))
+    print(sum_list_1(my_list))
+
+
+if __name__ == '__main__':
+    fill_list_lc()
+    fill_list_gen()
+
+
+"""
+1409831608061185538
+
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    81     19.3 MiB     19.3 MiB           1   @profile
+    82                                         def fill_list_lc():
+    83     21.9 MiB      2.6 MiB       50002       my_list = [i ** 3 for i in range(3, 100000, 2)]  # Соберите нужный список по заданию
+    84     21.9 MiB      0.0 MiB           1       print(sum_list_1(my_list))
+
+
+1409831608061185538
+
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    87     19.6 MiB     19.6 MiB           1   @profile
+    88                                         def fill_list_gen():
+    89     19.6 MiB      0.0 MiB      100001       my_list = (i ** 3 for i in range(3, 100000, 2))
+    90     19.6 MiB      0.0 MiB           1       print(sum_list_1(my_list))
+
+
+
+Process finished with exit code 0
+
+
+Генератор вместо LC, экономия памяти 100%
 """
