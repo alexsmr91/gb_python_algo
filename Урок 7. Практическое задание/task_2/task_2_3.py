@@ -16,3 +16,31 @@
 
 В конце сделайте аналитику какой трех из способов оказался эффективнее
 """
+from random import randint
+from timeit import timeit
+import statistics
+
+
+if __name__ == "__main__":
+    m = 10
+    lst = [randint(-100, 100) for _ in range(2 * m + 1)]
+    #lst = [6, 2, 3, 1, 5, 4, 7]
+    print(lst)
+    print(f'Медиана = {statistics.median(lst[:])}')
+
+    lens = [10, 100, 1000]
+    n_tests = 100
+    for ln in lens:
+        lst = [randint(-100, 100) for _ in range(ln)]
+        print(f'Поиск медианы с помощью модуля statistics в массиве длинной - {ln} - '
+              f'{timeit("statistics.median(lst[:])", globals=globals(), number=n_tests)} sec')
+
+"""
+m = 10
+[71, -17, 14, -49, 99, -46, -47, 15, 95, 74, -38, -25, 45, 49, 26, -68, -18, 96, -38, 22, -52]
+Медиана = 14
+
+Поиск медианы с помощью модуля statistics в массиве длинной - 10 - 0.00012419999999999098 sec
+Поиск медианы с помощью модуля statistics в массиве длинной - 100 - 0.0009297999999999945 sec
+Поиск медианы с помощью модуля statistics в массиве длинной - 1000 - 0.012774600000000011 sec
+"""
