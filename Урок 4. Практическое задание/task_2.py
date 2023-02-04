@@ -22,28 +22,6 @@ def recursive_reverse(number):
     return f'{str(number % 10)}{recursive_reverse(number // 10)}'
 
 
-num_100 = randint(10000, 1000000)
-num_1000 = randint(1000000, 10000000)
-num_10000 = randint(100000000, 10000000000000)
-
-print('Не оптимизированная функция recursive_reverse')
-print(
-    timeit(
-        "recursive_reverse(num_100)",
-        setup='from __main__ import recursive_reverse, num_100',
-        number=10000))
-print(
-    timeit(
-        "recursive_reverse(num_1000)",
-        setup='from __main__ import recursive_reverse, num_1000',
-        number=10000))
-print(
-    timeit(
-        "recursive_reverse(num_10000)",
-        setup='from __main__ import recursive_reverse, num_10000',
-        number=10000))
-
-
 def memoize(f):
     cache = {}
 
@@ -64,39 +42,33 @@ def recursive_reverse_mem(number):
     return f'{str(number % 10)}{recursive_reverse_mem(number // 10)}'
 
 
-recursive_reverse_mem(123)
-recursive_reverse_mem(1230)
-recursive_reverse_mem(12301)
-recursive_reverse_mem(123012)
+if __name__ == "__main__":
+    num_100 = randint(10000, 1000000)
+    num_1000 = randint(1000000, 10000000)
+    num_10000 = randint(100000000, 10000000000000)
 
+    n_tests = 1000000
 
-print('Оптимизированная функция recursive_reverse_mem')
-print(
-    timeit(
-        'recursive_reverse_mem(num_100)',
-        setup='from __main__ import recursive_reverse_mem, num_100',
-        number=10000))
-print(
-    timeit(
-        'recursive_reverse_mem(num_1000)',
-        setup='from __main__ import recursive_reverse_mem, num_1000',
-        number=10000))
-print(
-    timeit(
-        'recursive_reverse_mem(num_10000)',
-        setup='from __main__ import recursive_reverse_mem, num_10000',
-        number=10000))
+    print('Не оптимизированная функция recursive_reverse')
+    print(timeit("recursive_reverse(num_100)", globals=globals(), number=n_tests))
+    print(timeit("recursive_reverse(num_1000)", globals=globals(), number=n_tests))
+    print(timeit("recursive_reverse(num_10000)", globals=globals(), number=n_tests))
+
+    print('Оптимизированная функция recursive_reverse_mem')
+    print(timeit('recursive_reverse_mem(num_100)', globals=globals(), number=n_tests))
+    print(timeit('recursive_reverse_mem(num_1000)', globals=globals(), number=n_tests))
+    print(timeit('recursive_reverse_mem(num_10000)', globals=globals(), number=n_tests))
 
 """
-123, 1230, 12301, 123012 -- в таких случаях меморизация помогает
-Замеры подтверждают эффективность меморизации
+Благодаря декоратору кэширования вычисления производятся только в первом прогоне теста,
+остальные прогоны не вычисляются, а берутся из кэша
 
 Не оптимизированная функция recursive_reverse
-0.0433457
-0.052503999999999995
-0.08536380000000002
+3.4795785
+3.8612288
+7.2221372
 Оптимизированная функция recursive_reverse_mem
-0.002611299999999983
-0.0028682999999999903
-0.0031007000000000118
+0.2264122000000004
+0.2497480000000003
+0.27421960000000034
 """
