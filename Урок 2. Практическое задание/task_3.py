@@ -18,3 +18,15 @@
 Не забудьте проверить на числе, которое оканчивается на 0.
 1230 -> 0321
 """
+
+
+def rev(num: int, fl='0'):
+    if num == 0:
+        return fl
+    return f'{num % 10}{rev(num // 10, fl="")}'
+
+
+if __name__ == "__main__":
+    tst = [123, 122, 112, 100, 1, 0, 2000, 1234, 123456]
+    for ts in tst:
+        print(f'{ts} - {rev(ts)}')

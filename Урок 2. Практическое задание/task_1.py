@@ -27,3 +27,29 @@
 Вы вместо трехзначного числа ввели строку (((. Исправьтесь
 Введите операцию (+, -, *, / или 0 для выхода):
 """
+
+
+def calc(op='', a='', b=''):
+    operation = {
+        "+": lambda x, y: x + y,
+        "-": lambda x, y: x - y,
+        "/": lambda x, y: x / y,
+        "*": lambda x, y: x * y
+    }
+    if op == "0":
+        return None
+    if op in operation:
+        a = input("Введите первое число:")
+        b = input("Введите второе число:")
+        try:
+            print(operation[op](int(a), int(b)))
+        except ValueError:
+            print("Вы вместо числа ввели строку (((. Исправьтесь")
+        except ZeroDivisionError:
+            print("Нельзя делить на ноль (((. Исправьтесь")
+    op = input("Введите операцию (+, -, *, / или 0 для выхода):")
+    calc(op=op, a=a, b=b)
+
+
+if __name__ == "__main__":
+    calc()
