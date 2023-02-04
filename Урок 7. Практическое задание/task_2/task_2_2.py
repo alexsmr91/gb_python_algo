@@ -14,3 +14,36 @@
 
 сделайте замеры на массивах длиной 10, 100, 1000 элементов
 """
+from random import randint
+from timeit import timeit
+
+
+def median(array: list):
+    n = len(array)
+    for i in range(n // 2):
+        array.remove(max(array))
+    return max(array)
+
+
+if __name__ == "__main__":
+    m = 10
+    lst = [randint(-100, 100) for _ in range(2 * m + 1)]
+    #lst = [6, 2, 3, 1, 5, 4, 7]
+    print(lst)
+    print(f'Медиана = {median(lst[:])}')
+    lens = [10, 100, 1000]
+    n_tests = 100
+    for ln in lens:
+        lst = [randint(-100, 100) for _ in range(ln)]
+        print(f'Поиск медианы с помощью max, в массиве длинной - {ln} - '
+              f'{timeit("median(lst[:])", globals=globals(), number=n_tests)} sec')
+
+"""
+m = 10
+[19, -37, -73, 47, -21, 44, -71, 68, 77, 9, -28, 37, -38, -77, -79, -70, -20, 45, 4, 77, -51]
+Медиана = -20
+
+Поиск медианы с помощью max, в массиве длинной - 10 - 0.00031589999999999396 sec
+Поиск медианы с помощью max, в массиве длинной - 100 - 0.012510300000000002 sec
+Поиск медианы с помощью max, в массиве длинной - 1000 - 1.0361064 sec
+"""

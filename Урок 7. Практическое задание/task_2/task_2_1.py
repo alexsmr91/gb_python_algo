@@ -15,3 +15,47 @@
 
 сделайте замеры на массивах длиной 10, 100, 1000 элементов
 """
+from random import randint
+from timeit import timeit
+
+
+def gnome_sort(array: list):
+    i = 0
+    n = len(array)
+    while i < n:
+        if i == 0:
+            i += 1
+        if array[i] >= array[i - 1]:
+            i += 1
+        else:
+            array[i], array[i - 1] = array[i - 1], array[i]
+            i -= 1
+    return array
+
+
+if __name__ == "__main__":
+    m = 10
+    lst = [randint(-100, 100) for _ in range(2 * m + 1)]
+    print(lst)
+    print(gnome_sort(lst))
+    print(f'Медиана = {lst[m]}')
+
+    lens = [10, 100, 1000]
+    n_tests = 100
+    for ln in lens:
+        lst = [randint(-100, 100) for _ in range(ln)]
+        print(f'Гномья сортировка массива длинной {ln} - '
+              f'{timeit("gnome_sort(lst[:])", globals=globals(), number=n_tests)} sec')
+
+
+"""
+m = 10
+[-2, -82, -88, -57, -2, -34, 60, -88, -10, 72, 0, 91, -79, -92, -70, 72, -12, 15, -40, 99, -72]
+[-92, -88, -88, -82, -79, -72, -70, -57, -40, -34, -12, -10, -2, -2, 0, 15, 60, 72, 72, 91, 99]
+Медиана = -12
+
+
+Гномья сортировка массива длинной 10 - 0.0016266000000000058 sec
+Гномья сортировка массива длинной 100 - 0.1317079 sec
+Гномья сортировка массива длинной 1000 - 13.996823899999999 sec
+"""
