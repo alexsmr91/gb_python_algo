@@ -22,3 +22,15 @@
 р
 а
 """
+from hashlib import md5
+
+
+if __name__ == "__main__":
+    s = input("Введите строку: ")
+    uniq = set()
+    for i in range(len(s)+2):
+        for j in range(i+1, len(s)+1):
+            hash = md5(s[i:j].encode()).hexdigest()
+            uniq.add(hash)
+    uniq.remove(md5(s.encode()).hexdigest())
+    print(f'{len(uniq)} уникальных подстрок')
